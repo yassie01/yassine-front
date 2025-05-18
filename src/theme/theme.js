@@ -10,21 +10,16 @@ import { switchStyles } from "./components/switch";
 import { linkStyles } from "./components/link";
 import { breakpoints } from "./foundations/breakpoints";
 import { globalStyles } from "./styles";
-
-const theme = extendTheme({
-  breakpoints,
-  ...globalStyles,
-  components: {
-    ...badgeStyles.components,
-    ...buttonStyles.components,
-    ...linkStyles.components,
-    ...progressStyles.components,
-    ...sliderStyles.components,
-    ...inputStyles.components,
-    ...textareaStyles.components,
-    ...switchStyles.components,
-    ...CardComponent.components,
-  },
-});
-
-export default theme;
+export default extendTheme(
+  { breakpoints }, // Breakpoints
+  globalStyles,
+  badgeStyles, // badge styles
+  buttonStyles, // button styles
+  linkStyles, // link styles
+  progressStyles, // progress styles  
+  sliderStyles, // slider styles
+  inputStyles, // input styles
+  textareaStyles, // textarea styles
+  switchStyles, // switch styles
+  CardComponent // card component
+);
