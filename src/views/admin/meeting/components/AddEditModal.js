@@ -26,7 +26,7 @@ import {
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { getApi, postApi, putApi } from "services/api";
+import { postApi, putApi } from "services/api";
 import moment from "moment";
 
 const validationSchema = Yup.object({

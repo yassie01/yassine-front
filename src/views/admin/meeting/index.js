@@ -16,7 +16,7 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { CiMenuKebab } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import MeetingAdvanceSearch from "./components/MeetingAdvanceSearch";
-import MeetingModal from "./components/MeetingModal";
+import MeetingModal from "./components/AddEditModal";
 import CommonDeleteModel from "../../../components/commonDeleteModel";
 import { deleteManyApi } from "services/api";
 import { toast } from "react-toastify";

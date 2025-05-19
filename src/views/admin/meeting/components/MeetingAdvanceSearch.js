@@ -13,7 +13,6 @@ import {
   GridItem,
   Input,
   FormLabel,
-  Text,
   Button,
   FormControl,
   VStack,
@@ -23,7 +22,6 @@ import moment from "moment";
 import {
   getSearchData,
   setGetTagValues,
-  setSearchValue,
 } from "../../../../redux/slices/advanceSearchSlice";
 import { useDispatch } from "react-redux";
 
@@ -36,7 +34,6 @@ const MeetingAdvanceSearch = (props) => {
     setSearchedData,
     setDisplaySearchData,
     setSearchbox,
-    setAction,
   } = props;
 
   const dispatch = useDispatch();
@@ -117,17 +114,8 @@ const MeetingAdvanceSearch = (props) => {
     },
   });
 
-  const {
-    errors,
-    touched,
-    values,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-    resetForm,
-    dirty,
-  } = formik;
+  const { values, handleBlur, handleChange, handleSubmit, resetForm, dirty } =
+    formik;
 
   return (
     <Modal

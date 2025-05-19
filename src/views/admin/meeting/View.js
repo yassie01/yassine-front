@@ -21,6 +21,9 @@ import { deleteApi } from "services/api";
 import CommonDeleteModel from "components/commonDeleteModel";
 import { FaFilePdf } from "react-icons/fa";
 import html2pdf from "html2pdf.js";
+
+// This file will be renamed to MeetingDetails.js
+
 const View = () => {
   const param = useParams();
 
@@ -144,8 +147,7 @@ const View = () => {
                       fontWeight="bold"
                       color={"blackAlpha.900"}
                     >
-                      {" "}
-                      Agenda{" "}
+                      Agenda
                     </Text>
                     <Text>{data?.agenda ? data?.agenda : " - "}</Text>
                   </GridItem>
@@ -155,7 +157,6 @@ const View = () => {
                       fontWeight="bold"
                       color={"blackAlpha.900"}
                     >
-                      {" "}
                       Created By
                     </Text>
                     {data?.createBy
@@ -169,14 +170,12 @@ const View = () => {
                       fontWeight="bold"
                       color={"blackAlpha.900"}
                     >
-                      {" "}
-                      DateTime{" "}
+                      DateTime
                     </Text>
                     <Text>
-                      {" "}
                       {data?.dateTime
                         ? moment(data?.dateTime).format("DD-MM-YYYY  h:mma ")
-                        : " - "}{" "}
+                        : " - "}
                       [{data?.dateTime ? moment(data?.dateTime).toNow() : " - "}
                       ]
                     </Text>
@@ -187,14 +186,12 @@ const View = () => {
                       fontWeight="bold"
                       color={"blackAlpha.900"}
                     >
-                      {" "}
-                      Timestamp{" "}
+                      Timestamp
                     </Text>
                     <Text>
-                      {" "}
                       {data?.timestamp
                         ? moment(data?.timestamp).format("DD-MM-YYYY  h:mma ")
-                        : " - "}{" "}
+                        : " - "}
                       [
                       {data?.timestamp
                         ? moment(data?.timestamp).toNow()
@@ -208,8 +205,7 @@ const View = () => {
                       fontWeight="bold"
                       color={"blackAlpha.900"}
                     >
-                      {" "}
-                      Location{" "}
+                      Location
                     </Text>
                     <Text>{data?.location ? data?.location : " - "}</Text>
                   </GridItem>
@@ -219,8 +215,7 @@ const View = () => {
                       fontWeight="bold"
                       color={"blackAlpha.900"}
                     >
-                      {" "}
-                      Notes{" "}
+                      Notes
                     </Text>
                     <Text>{data?.notes ? data?.notes : " - "}</Text>
                   </GridItem>
@@ -233,7 +228,6 @@ const View = () => {
                       Attendes
                     </Text>
 
-                    {/* Show contact attendes if contact view access is granted */}
                     {contactAccess?.view &&
                       data?.attendes?.length > 0 &&
                       data.attendes.map((item, index) => (
@@ -250,23 +244,17 @@ const View = () => {
                       Lead
                     </Text>
 
-                    {/* Show lead attendes if lead view access is granted */}
                     {leadAccess?.view &&
                       data?.attendesLead?.length > 0 &&
                       data.attendesLead.map((item, index) => (
                         <Text key={`lead-${index}`}>{item.leadName}</Text>
                       ))}
 
-                    {/* Fallback if no access or no attendes */}
                     {!(
                       (contactAccess?.view && data?.attendes?.length) ||
                       (leadAccess?.view && data?.attendesLead?.length)
                     ) && <Text>-</Text>}
                   </GridItem>
-
-                  {/* <Grid templateColumns={'repeat(2, 1fr)'} gap={4} id="reports">
-
-                                    </Grid> */}
                 </Grid>
               </Card>
             </GridItem>
