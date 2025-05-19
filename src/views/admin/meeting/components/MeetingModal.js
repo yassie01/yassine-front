@@ -43,56 +43,11 @@ const MeetingModal = ({
   leads,
   isOpen,
   onClose,
-  selectedValues,
+  editData,
   onSuccess,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [editData, setEditData] = useState(null);
   const toast = useToast();
-
-  const fetchMeetingDetails = async (id) => {
-    try {
-      const response = await getApi(`api/meeting/view/${id}`);
-      const meetingData = response.data;
-      setEditData(meetingData);
-
-      const formattedDateTime = meetingData.dateTime
-        ? moment(meetingData.dateTime).format("YYYY-MM-DDTHH:mm")
-        : "";
-
-      formik.setValues({
-        agenda: meetingData.agenda || "",
-        dateTime: formattedDateTime,
-        location: meetingData.location || "",
-        notes: meetingData.notes || "",
-        attendes: meetingData.attendes?.map((contact) => contact._id) || [],
-        attendesLead: meetingData.attendesLead?.map((lead) => lead._id) || [],
-        related: meetingData.related || "",
-        createBy: meetingData.createBy?._id || "",
-        createFor: meetingData.createFor || "",
-      });
-    } catch (error) {
-      console.error("Error fetching meeting details:", error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch meeting details",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      if (selectedValues?.[0]) {
-        fetchMeetingDetails(selectedValues[0]);
-      } else {
-        setEditData(null);
-        formik.resetForm();
-      }
-    }
-  }, [isOpen, selectedValues]);
 
   const formik = useFormik({
     initialValues: {
@@ -153,6 +108,28 @@ const MeetingModal = ({
       }
     },
   });
+
+  useEffect(() => {
+    if (isOpen && editData) {
+      const formattedDateTime = editData.dateTime
+        ? moment(editData.dateTime).format("YYYY-MM-DDTHH:mm")
+        : "";
+
+      formik.setValues({
+        agenda: editData.agenda || "",
+        dateTime: formattedDateTime,
+        location: editData.location || "",
+        notes: editData.notes || "",
+        attendes: editData.attendes?.map((contact) => contact._id) || [],
+        attendesLead: editData.attendesLead?.map((lead) => lead._id) || [],
+        related: editData.related || "",
+        createBy: editData.createBy?._id || "",
+        createFor: editData.createFor || "",
+      });
+    } else if (isOpen) {
+      formik.resetForm();
+    }
+  }, [isOpen, editData]);
 
   const handleContactSelect = (e) => {
     const selectedId = e.target.value;
@@ -271,12 +248,18 @@ const MeetingModal = ({
                       onChange={handleContactSelect}
                       placeholder="Select contacts"
                     >
-                      {contacts?.map((contact) => (
-                        <option key={contact._id} value={contact._id}>
-                          {contact.fullName}
-                        </option>
-                      ))}
+                      {contacts
+                        ?.filter(
+                          (contact) =>
+                            !formik.values.attendes.includes(contact._id)
+                        )
+                        .map((contact) => (
+                          <option key={contact._id} value={contact._id}>
+                            {contact.fullName}
+                          </option>
+                        ))}
                     </Select>
+
                     <Box mt={2}>
                       <Wrap spacing={2}>
                         {formik.values.attendes.map((contactId) => {
@@ -317,12 +300,18 @@ const MeetingModal = ({
                       onChange={handleLeadSelect}
                       placeholder="Select leads"
                     >
-                      {leads?.map((lead) => (
-                        <option key={lead._id} value={lead._id}>
-                          {lead.leadName}
-                        </option>
-                      ))}
+                      {leads
+                        ?.filter(
+                          (lead) =>
+                            !formik.values.attendesLead.includes(lead._id)
+                        )
+                        .map((lead) => (
+                          <option key={lead._id} value={lead._id}>
+                            {lead.leadName}
+                          </option>
+                        ))}
                     </Select>
+
                     <Box mt={2}>
                       <Wrap spacing={2}>
                         {formik.values.attendesLead.map((leadId) => {

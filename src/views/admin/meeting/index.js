@@ -17,11 +17,9 @@ import { CiMenuKebab } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import MeetingAdvanceSearch from "./components/MeetingAdvanceSearch";
 import MeetingModal from "./components/MeetingModal";
-import CommonDeleteModel from "components/commonDeleteModel";
+import CommonDeleteModel from "../../../components/commonDeleteModel";
 import { deleteManyApi } from "services/api";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import moment from "moment";
 
 const Index = () => {
   const title = "Meeting";
@@ -32,7 +30,6 @@ const Index = () => {
   const [advanceSearch, setAdvanceSearch] = useState(false);
   const [getTagValuesOutSide, setGetTagValuesOutside] = useState([]);
   const [searchboxOutside, setSearchboxOutside] = useState("");
-  const user = JSON.parse(localStorage.getItem("user"));
   const [deleteMany, setDeleteMany] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const [data, setData] = useState([]);
@@ -129,7 +126,7 @@ const Index = () => {
       cell: (cell) => (
         <Text>
           {(cell.row.original.attendes?.length || 0) +
-            (cell.row.original.attendesLead?.length || 0)}{" "}
+            (cell.row.original.attendesLead?.length || 0)}
           Attendees
         </Text>
       ),
@@ -147,29 +144,28 @@ const Index = () => {
       setData(response.data.meetings);
     } catch (error) {
       toast.error(error.message || "Failed to fetch meetings");
+    } finally {
+      setIsLoding(false);
     }
-    setIsLoding(false);
   };
 
   const fetchContacts = async () => {
     try {
       const response = await getApi("api/contact");
-      console.log("contacts");
-      console.log(response.data);
       setContacts(response.data || []);
     } catch (error) {
       console.error("Error fetching contacts:", error);
+      toast.error("Failed to fetch contacts");
     }
   };
 
   const fetchLeads = async () => {
     try {
       const response = await getApi("api/lead");
-      console.log("leads");
-      console.log(response.data);
       setLeads(response.data || []);
     } catch (error) {
       console.error("Error fetching leads:", error);
+      toast.error("Failed to fetch leads");
     }
   };
 
@@ -246,9 +242,13 @@ const Index = () => {
         setGetTagValues={setGetTagValuesOutside}
         setSearchbox={setSearchboxOutside}
       />
-  
 
       <MeetingModal
+        editData={
+          selectedValues?.[0]
+            ? data.find((item) => item._id === selectedValues[0])
+            : null
+        }
         contacts={contacts}
         leads={leads}
         isOpen={isOpen}
