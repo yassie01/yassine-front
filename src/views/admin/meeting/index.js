@@ -38,6 +38,7 @@ const Index = () => {
   const [permission] = HasAccess(["Meetings"]);
   const [contacts, setContacts] = useState([]);
   const [leads, setLeads] = useState([]);
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
 
   const actionHeader = {
     Header: "Action",
@@ -65,7 +66,7 @@ const Index = () => {
                 py={2.5}
                 color={"blue"}
                 onClick={() => {
-                  setSelectedValues([row?.values?._id]);
+                  setSelectedMeeting(row.original);
                   onOpen();
                 }}
                 icon={<EditIcon fontSize={15} />}
@@ -244,19 +245,17 @@ const Index = () => {
       />
 
       <MeetingModal
-        editData={
-          selectedValues?.[0]
-            ? data.find((item) => item._id === selectedValues[0])
-            : null
-        }
+        editData={selectedMeeting}
         contacts={contacts}
         leads={leads}
         isOpen={isOpen}
         onClose={() => {
           onClose();
+          setSelectedMeeting(null);
           setAction((pre) => !pre);
         }}
         onSuccess={() => {
+          setSelectedMeeting(null);
           setAction((pre) => !pre);
           onClose();
         }}
